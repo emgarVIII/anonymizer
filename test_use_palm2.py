@@ -4,6 +4,7 @@ from google.ai import generativelanguage as glm
 st.title("OBFUSELY")
 
 api_key = 'AIzaSyCHV0MuWxC4PfX80rqrjbw7t4rnDneVS1s'
+selected_language = st.selectbox("Select a programming language", ["Python", "C++", "Java", "JavaScript", "Ruby"])
 message_prompt = st.text_area("Test Prompt:")
 
 # google palm2 api function
