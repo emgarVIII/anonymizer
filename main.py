@@ -65,14 +65,21 @@ if st.button("Generate Response"):
             stripped = candidate.content.lower().split()
             for word in stripped:
                 s.append(word)
-        print(s)
-        st.write(s)
-        if "true" in s or "true." in s:
-                st.write('It knows its true')
-                newprompt = f"Anonymize the following code: {user_prompt}"
-                res = generate_message(api_key, prompt=newprompt)
-                for can in res.candidates:
-                    st.write(can.content)
-        else:
-            st.write("NO. there is no code")
+        # print(s)
+        # st.write(s)
+        # if "true" in s or "true." in s:
+        # st.write('It knows its true')
+        newprompt = (f"I want you to make the following code completely different than the first version I sent you. You must:"
+                     f"1. do not change type of variables and 2. change variable names to others. 3. do NOT change functionality. it must function the same"
+                     f"as the original: {user_prompt}")
+        # newprompt = (
+        #     f"I want you to make the following code completely different than the first version I sent you. You must:"
+        #     f"1. do not change type of variables and 2. change variable names to others. 3. do NOT change functionality. it must function the same"
+        #     f"as the original: {user_prompt}")
+        # newprompt = f"I want you to anonymize this code: {user_prompt}"
+        res = generate_message(api_key, prompt=newprompt)
+        for can in res.candidates:
+            st.write(can.content)
+        # else:
+        # st.write("NO. there is no code")
 
