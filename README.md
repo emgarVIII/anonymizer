@@ -1,2 +1,2 @@
-# OBFUSER
+# ANONYMIZER
 
