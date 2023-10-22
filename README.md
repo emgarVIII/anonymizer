@@ -1,6 +1,6 @@
 # 🕵️ ANONYMIZER 🛡️
 
-Palm-2 Streamlit integration for anonymzing / obfuscating entire codebases and repos
+Palm-2 Streamlit integration for anonymizing / obfuscating entire codebases and repos
 
 ## 🌠 Inspiration:
 The creation of our code anonymizer project was deeply influenced by the challenges faced by industry giants like Samsung. They encountered significant issues related to code leaks when their proprietary code inadvertently surfaced on platforms like ChatGPT. This unsettling experience highlighted the pressing need for a robust solution to protect sensitive and valuable code assets.
