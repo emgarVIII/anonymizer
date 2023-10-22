@@ -70,4 +70,4 @@ if st.button("Generate Response"):
             for can in res.candidates:
                 st.write(can.content)
         else:
-            st.write("Please input valid code. What you have entered is not code from any known programming language.")
+            st.write("Please input code Only. What you have entered is not code from any known programming language.")
