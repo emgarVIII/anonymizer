@@ -2,7 +2,8 @@ import streamlit as st
 from google.ai import generativelanguage as glm
 import openai
 import re
-openai.api_key = ""
+#api key might get leaked/ confidential
+#openai.api_key = 
 custom_css = """
 <style>
 .stApp{
