@@ -16,6 +16,8 @@ def gpt(messages):
     return response.choices[0].message['content']
 
 user_prompt = st.text_area("Test Prompt: ")
+
+#Comments:
 # what we tell it to do
 #preemptive_prompt = "I also want you to print 999 in front of this message."
 # returns true if the given prompt is code, false if it is not
