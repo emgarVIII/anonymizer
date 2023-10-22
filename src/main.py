@@ -1,13 +1,32 @@
 import streamlit as st
 from google.ai import generativelanguage as glm
 import openai
+import re
+openai.api_key = ""
+custom_css = """
+<style>
+.stApp{
+background-color: #B2BEB5 !important;
+}
 
-openai.api_key = "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"
+.custom-title{
+color: #242124;
+font-size: 50px;
+text-align: center;
+font-weight: bold;
+margin-top: -70px;
+}
 
-st.title("OBFUSELY")
+</style>
+"""
 
-api_key = 'AIzaSyCHV0MuWxC4PfX80rqrjbw7t4rnDneVS1s'
+st.markdown(custom_css, unsafe_allow_html=True)
 
+st.markdown('<p class="custom-title">Anonymizer</p>', unsafe_allow_html=True)
+
+
+st.selectbox('Select Language', ['Python','Java','C#','C++','C','Javascript'])
+# chat GPT powered validation
 def gpt(messages):
     response = openai.ChatCompletion.create(
         model='gpt-3.5-turbo',
@@ -15,16 +34,9 @@ def gpt(messages):
     )
     return response.choices[0].message['content']
 
-user_prompt = st.text_area("Test Prompt: ")
-
-#Comments:
-# what we tell it to do
-#preemptive_prompt = "I also want you to print 999 in front of this message."
-# returns true if the given prompt is code, false if it is not
+user_prompt = st.text_area("Test Prompt: ", height=300)
 
 # google palm2 api function
-# 1024 tokens max - about 1000 words aka page of text / code
-
 def generate_message(api_key, prompt):
     client = glm.DiscussServiceClient(client_options={'api_key': api_key})
     request = glm.GenerateMessageRequest(
@@ -33,8 +45,7 @@ def generate_message(api_key, prompt):
         prompt = glm.MessagePrompt(messages=[glm.Message(content=prompt)]))
     return client.generate_message(request)
 
-
-
+# checks if it is code or not. returns true or false accordingly
 def is_code_gpt(prompt):
     textinp = f"Is the following actual code or just text. Answer ONLY TRUE if it is code and FALSE if it is not: {prompt}"
     messages = [
@@ -45,7 +56,6 @@ def is_code_gpt(prompt):
     gptres = gpt(messages)
     return gptres
 
-
 # streamlit app test is_code method
 if st.button("Generate Response"):
     if not user_prompt:
@@ -53,21 +63,20 @@ if st.button("Generate Response"):
     else:
         st.subheader("API Response:")
         response = is_code_gpt(user_prompt)
-        st.write(response)
-        print(response)
-
         if "TRUE" in response.upper():
-            st.write("REACHES HERE")
-            # newprompt = (
-            #     f"I want you to make the following code completely different than the first version I sent you. You must:"
-            #     f"1. do not change type of variables. change variable names and function names to the point where it is anonymized to others. do NOT change functionality. it must function the same"
-            #     f"as the original: {user_prompt}")
             newprompt = (
                 f"I want you to make the following code completely different than the first version I sent you. You must:"
                 f"1. do not change type of variables and 2. change variable names to others. 3. do NOT change functionality. it must function the same"
                 f"as the original: {user_prompt}")
             res = generate_message(api_key, prompt=newprompt)
+            output = ''
             for can in res.candidates:
-                st.write(can.content)
+                code_matches = re.findall(r'```python\n(.*?)```', can.content, re.DOTALL)
+                if code_matches:
+                    extracted_code = "```python\n" + code_matches[0] + "```"
+                    st.write(extracted_code)
+                    print(extracted_code)
+                else:
+                    print("No code found within triple backticks.")
         else:
             st.write("Please input code Only. What you have entered is not code from any known programming language.")
